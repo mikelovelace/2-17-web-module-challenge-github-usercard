@@ -1,8 +1,19 @@
+import axios from "axios";
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+axios
+.get("https://api.github.com/users/mikelovelace")
+.then((res) => {
+  const cardContainer = document.querySelector(".cards")
+  cardContainer.appendChild(githubCard(res.data))
+  console.log(res.data)
+})
+.catch((err) => {
+  console.log(`!!!ERROR ERROR ERROR!!!`, err)
+})
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -58,3 +69,42 @@ const followersArray = [];
     luishrd
     bigknell
 */
+function githubCard(userObj) {
+  const userCard = document.createElement("div")
+  const userImg = document.createElement("img")
+  const userCardInfo = document.createElement("div")
+  const userRealName = document.createElement("h3")
+  const userScreenName = document.createElement("p")
+  const userLocation = document.createElement("p")
+  const userProfile = document.createElement("p")
+  const userLink = document.createElement("a")
+  const userFollowers = document.createElement("p")
+  const userFollowing = document.createElement("p")
+  const userBio = document.createElement("p")
+
+  userImg.src = userObj.avatar_url
+  userImg.alt = "github user"
+  userRealName.textContent = userObj.username
+  userScreenName.textContent = userObj.login
+  userLocation.textContent = userObj.location
+  userProfile.textContent = "Profile"
+  userLink.textContent = "Link to profile"
+  userLink.href = userObj.html_url
+  userFollowers.textContent = `Followers: ${userObj.followers}`
+  userFollowing.textContent = `Following: ${userObj.following}`
+  userBio.textContent = userObj.bio
+
+  userCard.appendChild(userImg)
+  userCard.appendChild(userCardInfo)
+  userCardInfo.appendChild(userRealName)
+  userCardInfo.appendChild(userScreenName)
+  userCardInfo.appendChild(userLocation)
+  userCardInfo.appendChild(userProfile)
+  userProfile.appendChild(userLink)
+  userCardInfo.appendChild(userFollowers)
+  userCardInfo.appendChild(userFollowing)
+  userCardInfo.appendChild(userBio)
+
+  return userCard
+
+}
