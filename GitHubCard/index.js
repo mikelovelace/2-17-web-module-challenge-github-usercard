@@ -5,25 +5,48 @@ axios
 .then((res) => {
   const cardContainer = document.querySelector(".cards")
   cardContainer.appendChild(githubCard(res.data))
+  getFollowers(res)
 })
 .catch((err) => {
   console.log(`!!!ERROR ERROR ERROR!!!`, err)
 })
 
-const followersArray = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"]
+// const followersArray = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"]
 
-followersArray.map((followers) => {
+// followersArray.map((followers) => {
+//   axios
+//   .get(`https://api.github.com/users/${followers}`)
+//   .then((res) => {
+//     const followerContainer = document.querySelector(".cards")
+//     followerContainer.appendChild(githubCard(res.data))
+//     console.log(`DATA DATA DATA`, res.data)
+//   })
+//   .catch((err) => {
+//     console.log(`!!!ERROR ERROR ERROR!!!`, err)
+//   })
+// })
+
+function getFollowers(obj) {
   axios
-  .get(`https://api.github.com/users/${followers}`)
+  .get(obj.data.followers_url)
   .then((res) => {
     const followerContainer = document.querySelector(".cards")
-    followerContainer.appendChild(githubCard(res.data))
-    console.log(`DATA DATA DATA`, res.data)
+    res.data.forEach((follower) => {
+      axios
+      .get(follower.url)
+      .then((res) => {
+        followerContainer.appendChild(githubCard(res.data))
+      })
+      .catch((err) => {
+        console.log(`!!!ERROR ERROR ERROR!!!`, err)
+      })
+    })
+    return res
   })
   .catch((err) => {
     console.log(`!!!ERROR ERROR ERROR!!!`, err)
   })
-})
+}
 
 
 
